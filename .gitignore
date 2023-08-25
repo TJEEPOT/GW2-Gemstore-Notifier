@@ -132,3 +132,6 @@ dmypy.json
 # Custom
 # .vscode folder
 .vscode
+
+# Ensure modified form of desired_items is not uploaded
+desired_items.txt
