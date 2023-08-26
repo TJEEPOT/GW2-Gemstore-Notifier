@@ -135,3 +135,6 @@ dmypy.json
 
 # Ensure modified form of desired_items is not uploaded
 desired_items.txt
+
+# Ensure modified log is not uploaded
+log.txt
