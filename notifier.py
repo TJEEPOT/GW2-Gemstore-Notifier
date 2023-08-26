@@ -38,7 +38,7 @@ def find_desired_sales(desired_items:list[str], sales_data:list[list[str]]) -> l
     return found_items
 
 """ Send a message to Discord with the desired item information. """
-def notify_discord(items:list[list[str]], discord_webhook:str):
+def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str):
     plural_item = "items" if len(items) > 1 else "item"
     title = f"Gemstone Notifier has found {len(items)} {plural_item} from your desired items list on sale!"
 
@@ -47,7 +47,7 @@ def notify_discord(items:list[list[str]], discord_webhook:str):
         field = {"name":item[0], "value":f"{item[2]} Gems", "inline": True} 
         fields.append(field)
 
-    content = "It's recommended that you revise your desired items list to ensure this message doesn't continue to repeat."
+    content = f"It's recommended that you revise your desired items list to ensure this message doesn't continue to repeat. API last upadated: {last_updated}."
 
     author = {
         "name": "Gemstore Notifier",
@@ -89,10 +89,10 @@ if __name__ == "__main__":
 
     if not desired_sales:
         print(f"No sales found for desired items. API last updated: {last_updated}")
-        write_to_log(f"No desired sales found. Last updated {last_updated}")
+        write_to_log(f"No desired sales found. API Last updated {last_updated}")
         exit()
     
-    notify_discord(desired_sales, discord_webhook)
+    notify_discord(desired_sales, discord_webhook, last_updated)
     for item in desired_sales:
         print(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems")
-        write_to_log(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems. Last updated {last_updated}")
+        write_to_log(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems. API Last updated {last_updated}")
