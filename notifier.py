@@ -53,7 +53,7 @@ def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str)
         "name": "Gemstore Notifier",
         "url": "https://github.com/TJEEPOT/GW2-Gemstore-Notifier/",
         "icon_url": r"https://wiki.guildwars2.com/images/8/88/Gem_%28highres%29.png"
-      }
+    }
     
     url = "https://wiki.guildwars2.com/wiki/Gem_Store#List_of_currently_available_Gem_Store_items"
     
