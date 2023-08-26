@@ -14,15 +14,17 @@ __status__     = "Development"  # "Development" "Prototype" "Production"
 
 import requests
 
-""" Make a request to the GW2 wiki API for the data of a given page in json format, then returns the content field (the page data) for further processing. Can take an existing session as parameter if doing multiple calls, else will generate a session for just this call. """
-def get_page_data(page_name:str, s = requests.session()) -> str:
-    url = f"https://wiki.guildwars2.com/api.php?action=query&prop=revisions&titles={page_name}&rvslots=%2A&rvprop=content&formatversion=2&format=json"
+""" Make a request to the GW2 wiki API for the data of a given page in json format, then returns the content field (the page data) and timestamp as a set for further processing. Can take an existing session as parameter if doing multiple calls, else will generate a session for just this call. """
+def get_page_data(page_name:str, s = requests.session()) -> set[str]:
+    url = f"https://wiki.guildwars2.com/api.php?action=query&prop=revisions&titles={page_name}&rvslots=%2A&rvprop=timestamp|content&formatversion=2&format=json"
     headers = {"User-Agent": "GW2-Gemstore-Notifier", # good practice to remain contactable with web admins
                      "From": "https://github.com/TJEEPOT/GW2-Gemstore-Notifier"}  
     response = s.get(url, headers=headers, timeout=10)
     json_response = response.json()
 
-    return json_response["query"]["pages"][0]["revisions"][0]["slots"]["main"]["content"]
+    content = json_response["query"]["pages"][0]["revisions"][0]["slots"]["main"]["content"]
+    timestamp = json_response["query"]["pages"][0]["revisions"][0]["timestamp"]
+    return (content, timestamp)
 
 """" Takes a page of wiki data and isolates each row of a table, adding it to a list which is returned once the data has been fully checked. Returned list has each element in the format of [Item, Availability, Cost, Qty, Discounted[y/n], Section, Subsection] """
 def process_page_data(data:str) -> list[list[str]]:
@@ -76,22 +78,23 @@ def find_sale_items(item_list: list[list[str]]) -> list[list[str]]:
 
     return sale_items
 
-""" Wrapper for the above functions. Returns a list of items that are currently on sale. Each item has the format: [Item, Availability, Cost, Qty, Discounted[y/n], Section, Subsection]. """
-def get_sales() -> list[list[str]]:
+""" Wrapper for the above functions. Returns a set: list of items that are currently on sale and the timestamp when the page was last edited. Each item has the format: [Item, Availability, Cost, Qty, Discounted[y/n], Section, Subsection]. """
+def get_sales() -> set:
     page_name = "Gem_Store/data"
-    data = get_page_data(page_name)
+    data, timestamp = get_page_data(page_name)
     gemstore_list = process_page_data(data)
     sale_items = find_sale_items(gemstore_list)
-    return sale_items
+    return (sale_items, timestamp)
 
 
 if __name__ == "__main__":
     session = requests.session()
     page_name = "Gem_Store/data"
-    data = get_page_data(page_name, session)
+    data, timestamp = get_page_data(page_name, session)
 
     gemstore_list = process_page_data(data)
 
     sale_items = find_sale_items(gemstore_list)
-    [print(x) for x in sale_items]
     print(f"{len(sale_items)} items found")
+    [print(x) for x in sale_items]
+    print(f"API last updated: {timestamp}")
