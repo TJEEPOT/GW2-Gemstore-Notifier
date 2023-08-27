@@ -67,7 +67,8 @@ def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str)
 
 """ Write the given line to the log. """
 def write_to_log(line:str):
-    time = datetime.datetime.now()
+    now = datetime.datetime.now()
+    time = now.strftime("%b %d %y %H:%M:%S")
     with open("log.txt", "a") as f:
         f.write(f"\n{time}: {line}")
 
@@ -84,15 +85,15 @@ if __name__ == "__main__":
         exit()
 
     desired_items = load_desired_items()
-    sales_data, last_updated = get_sales()
+    sales_data, api_last_updated = get_sales()
     desired_sales = find_desired_sales(desired_items, sales_data)
 
     if not desired_sales:
-        print(f"No sales found for desired items. API last updated: {last_updated}")
-        write_to_log(f"No desired sales found. API Last updated {last_updated}")
+        print(f"No sales found for desired items. API last updated: {api_last_updated}")
+        write_to_log(f"No desired sales found. API Last updated {api_last_updated}")
         exit()
     
-    notify_discord(desired_sales, discord_webhook, last_updated)
+    notify_discord(desired_sales, discord_webhook, api_last_updated)
     for item in desired_sales:
         print(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems")
-        write_to_log(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems. API Last updated {last_updated}")
+        write_to_log(f"Sale found for item {item[0]}! Sale price: {item[2]} Gems. API Last updated {api_last_updated}")
