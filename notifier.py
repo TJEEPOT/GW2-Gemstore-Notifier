@@ -14,6 +14,8 @@ __status__     = "Development"  # "Development" "Prototype" "Production"
 
 import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
 from dotenv import load_dotenv

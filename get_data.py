@@ -12,6 +12,10 @@ __author__     = "Martin Siddons"
 __email__      = "tjeepot@gmail.com"
 __status__     = "Development"  # "Development" "Prototype" "Production"
 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import requests
 
 """ Make a request to the GW2 wiki API for the data of a given page in json format, then returns the content field (the page data) and timestamp as a set for further processing. Can take an existing session as parameter if doing multiple calls, else will generate a session for just this call. """
