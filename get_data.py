@@ -10,7 +10,7 @@ History : 2023/08/25 - v1.0 - Create project file
 
 __author__     = "Martin Siddons"
 __email__      = "tjeepot@gmail.com"
-__status__     = "Development"  # "Development" "Prototype" "Production"
+__status__     = "Production"  # "Development" "Prototype" "Production"
 
 import sys
 import os
