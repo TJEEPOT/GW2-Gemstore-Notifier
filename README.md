@@ -11,6 +11,6 @@ This script is written in Python 3, therefore I recommend installing the latest 
  - Open a Terminal / Command Line / Powershell prompt in the folder the script is in and type ```python3 -m venv .venv``` to build a virtual environment for the scripts to run in. 
  - Activate the virtual environment with ```.\.venv\Scripts\activate.bat``` in Windows Command Line, ```.\.venv\Scripts\activate.ps1``` in Windows Powershell or ```source \.venv\Scripts\activate``` on Linux or Mac.
  - Load the required libraries with ```pip install -r requirements.txt```.
- - type ```python3 notifier.py [discord webhook]``` to run the program, obviously replacing ```[discord webhook]``` with your actual webhook.
+ - type ```python3 notifier.py [discord webhook]``` to run the program, obviously replacing ```[discord webhook]``` with your actual webhook (unless provided in the .env file).
 
 I'd recommend setting up a task / cron to run ```notifier.py``` every day or two to ensure you don't miss out on a deal.
