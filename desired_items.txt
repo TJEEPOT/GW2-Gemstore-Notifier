@@ -1,4 +1,4 @@
 # Add any items you wish to be notified of to this file, one item per line. 
 # Any line preceded by a '#' character, such as this, will be ignored by the script.
-# This can be used to temporally ignore certain items, such as below:
+# This can be used to temporarily ignore certain items, such as below:
 # Character Slot Expansion
