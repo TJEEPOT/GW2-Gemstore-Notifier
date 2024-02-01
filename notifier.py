@@ -25,10 +25,13 @@ from get_wiki_data import get_sales_from_wiki
 
 def load_desired_items() -> list[str]:
     desired_items = []
-    with open("desired_items.txt", "r") as f:
-        for line in f:
-            if not line.startswith("#"):
-                desired_items.append(line.strip("\n"))
+    try:
+        with open("desired_items.txt", "r") as f:
+            for line in f:
+                if not line.startswith("#"):
+                    desired_items.append(line.strip("\n"))
+    except FileNotFoundError:
+        print("desired_items.txt not found. Please check desired_items.txt.example for further instructions.")
     return desired_items
 
 """ Takes a list of item names the user desires and sales data and returns those items in sales_data that match the items in desired_items """
@@ -49,7 +52,7 @@ def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str)
         field = {"name":item[0], "value":f"{item[2]} Gems", "inline": True} 
         fields.append(field)
 
-    content = f"It's recommended that you revise your desired items list to ensure this message doesn't continue to repeat. API last upadated: {last_updated}."
+    content = f"It's recommended that you revise your desired items list to ensure this message doesn't repeat. API last updated: {last_updated}."
 
     author = {
         "name": "Gemstore Notifier",
