@@ -20,7 +20,7 @@ import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
 from dotenv import load_dotenv
 
-from get_data import get_sales
+from get_wiki_data import get_sales_from_wiki
 
 
 def load_desired_items() -> list[str]:
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         exit()
 
     desired_items = load_desired_items()
-    sales_data, api_last_updated = get_sales()
+    sales_data, api_last_updated = get_sales_from_wiki()
     desired_sales = find_desired_sales(desired_items, sales_data)
 
     if not desired_sales:

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import requests
 
 """ Make a request to the GW2 wiki API for the data of a given page in json format, then returns the content field (the page data) and timestamp as a set for further processing. Can take an existing session as parameter if doing multiple calls, else will generate a session for just this call. """
-def get_page_data(page_name:str, s = requests.session()) -> set[str]:
+def get_current_gemstore(page_name:str, s = requests.session()) -> set[str]:
     url = f"https://wiki.guildwars2.com/api.php?action=query&prop=revisions&titles={page_name}&rvslots=%2A&rvprop=timestamp|content&formatversion=2&format=json"
     headers = {"User-Agent": "GW2-Gemstore-Notifier", # good practice to remain contactable with web admins
                      "From": "https://github.com/TJEEPOT/GW2-Gemstore-Notifier"}  
@@ -83,9 +83,9 @@ def find_sale_items(item_list: list[list[str]]) -> list[list[str]]:
     return sale_items
 
 """ Wrapper for the above functions. Returns a set: list of items that are currently on sale and the timestamp when the page was last edited. Each item has the format: [Item, Availability, Cost, Qty, Discounted[y/n], Section, Subsection]. """
-def get_sales() -> set:
+def get_sales_from_wiki() -> set:
     page_name = "Gem_Store/data"
-    data, timestamp = get_page_data(page_name)
+    data, timestamp = get_current_gemstore(page_name)
     gemstore_list = process_page_data(data)
     sale_items = find_sale_items(gemstore_list)
     return (sale_items, timestamp)
@@ -94,7 +94,7 @@ def get_sales() -> set:
 if __name__ == "__main__":
     session = requests.session()
     page_name = "Gem_Store/data"
-    data, timestamp = get_page_data(page_name, session)
+    data, timestamp = get_current_gemstore(page_name, session)
 
     gemstore_list = process_page_data(data)
 
