@@ -3,7 +3,7 @@ Small project to check if there's any desired items on sale on the Guild Wars 2 
 
 # Usage Notes #
 In order to work correctly, you will need to create ```desired_items.txt```. ```desired_items.txt.example``` contains instructions for what this file should look like. 
-You will also need to provide your Discord webhook, either as a command line option or as the environment variable. To modify the environment variable, open the ```.env``` file in the main project folder and replace "REPLACE_ME" with your webhook.
+You will also need to provide your Discord webhook, either as a command line option or as the environment variable (recommended). To modify the environment variable, open the ```.env``` file in the main project folder and replace "REPLACE_ME" with your webhook.
 
 
 This script is written in Python 3, therefore I recommend installing the latest version of
