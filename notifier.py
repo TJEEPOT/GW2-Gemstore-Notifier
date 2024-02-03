@@ -96,7 +96,7 @@ def write_last_updated(last_updated:str):
 
 
 if __name__ == "__main__":
-    load_dotenv() # load the .env file
+    load_dotenv(override=True) # load the .env file
     discord_webhook = os.getenv("gemstore_webhook")
     if len(sys.argv) > 1:
         discord_webhook = sys.argv[1]
@@ -104,6 +104,11 @@ if __name__ == "__main__":
     if discord_webhook is None:
         print("ERROR: Discord Webhook not found. Have you included it as a command line argument and/or as a environment variable?", file=sys.stderr)
         write_to_log("Error: Discord Webhook not found.")
+        exit()
+
+    if discord_webhook == "REPLACE_ME":
+        print("ERROR: .env file still contains the default value 'CHANGE_ME'. Please change this to your Discord webhook.")
+        write_to_log("Error: Discord Webhook is still set to default value.")
         exit()
 
     desired_items = load_desired_items()
@@ -115,8 +120,7 @@ if __name__ == "__main__":
         print("API not updated since last check, will not send notification.")
         write_to_log(f"API has not updated since the last time this program was run. Last update: {api_last_updated}")
         exit()
-    else:
-        write_last_updated(api_last_updated)
+    write_last_updated(api_last_updated)
 
     if not desired_sales:
         print(f"No sales found for desired items. API last updated: {api_last_updated}")
