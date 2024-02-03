@@ -24,6 +24,7 @@ from get_wiki_data import get_sales_from_wiki
 
 
 def load_desired_items() -> list[str]:
+    """ Load desired_items.txt if it exists. """
     desired_items = []
     try:
         with open("desired_items.txt", "r") as f:
@@ -34,16 +35,27 @@ def load_desired_items() -> list[str]:
         print("desired_items.txt not found. Please check desired_items.txt.example for further instructions.")
     return desired_items
 
-""" Takes a list of item names the user desires and sales data and returns those items in sales_data that match the items in desired_items """
+def load_last_updated() -> str:
+    """ Get the date the API was last updated the previous time this script was run. """
+    last_updated = ""
+    try:
+        with open("last_updated.txt", "r") as f:
+            last_updated = f.read()
+    except FileNotFoundError:
+        print("last_updated.txt not found.")
+    return last_updated
+
+
 def find_desired_sales(desired_items:list[str], sales_data:list[list[str]]) -> list[list[str]]:
+    """ Takes a list of item names the user desires and sales data and returns those items in sales_data that match the items in desired_items """
     found_items = []
     for item in sales_data:
         if item[0] in desired_items:
             found_items.append(item)
     return found_items
 
-""" Send a message to Discord with the desired item information. """
 def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str):
+    """ Send a message to Discord with the desired item information. """
     plural_item = "items" if len(items) > 1 else "item"
     title = f"Gemstone Notifier has found {len(items)} {plural_item} from your desired items list on sale!"
 
@@ -70,12 +82,17 @@ def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str)
     if response.status_code != 200:
         write_to_log(f"Unusual response from Discord: {response.text}")
 
-""" Write the given line to the log. """
 def write_to_log(line:str):
+    """ Write the given line to the log. """
     now = datetime.datetime.now()
     time = now.strftime("%b %d %H:%M:%S")
     with open("notifier.log", "a+") as f:
         f.write(f"\n{time}: {line}")
+
+def write_last_updated(last_updated:str):
+    """ Write the date the API reports it was last updated. """
+    with open("last_updated.txt", "w") as f:
+        f.write(last_updated)
 
 
 if __name__ == "__main__":
@@ -92,6 +109,14 @@ if __name__ == "__main__":
     desired_items = load_desired_items()
     sales_data, api_last_updated = get_sales_from_wiki()
     desired_sales = find_desired_sales(desired_items, sales_data)
+
+    previously_updated = load_last_updated()
+    if previously_updated == api_last_updated:
+        print("API not updated since last check, will not send notification.")
+        write_to_log(f"API has not updated since the last time this program was run. Last update: {api_last_updated}")
+        exit()
+    else:
+        write_last_updated(api_last_updated)
 
     if not desired_sales:
         print(f"No sales found for desired items. API last updated: {api_last_updated}")
