@@ -133,6 +133,7 @@ dmypy.json
 # .vscode folder
 .vscode
 
-# Ensure modified form of desired_items is not uploaded
+# Ensure modified files are not uploaded
 desired_items.txt
 last_updated.txt
+notifier.log
