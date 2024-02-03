@@ -74,7 +74,7 @@ def notify_discord(items:list[list[str]], discord_webhook:str, last_updated:str)
 def write_to_log(line:str):
     now = datetime.datetime.now()
     time = now.strftime("%b %d %H:%M:%S")
-    with open("notifier.log", "a") as f:
+    with open("notifier.log", "a+") as f:
         f.write(f"\n{time}: {line}")
 
 
