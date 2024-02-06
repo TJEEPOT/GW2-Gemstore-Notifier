@@ -13,5 +13,6 @@ This script is written in Python 3, therefore I recommend installing the latest 
  - Load the required libraries with ```pip install -r requirements.txt```.
  - type ```python3 notifier.py [discord webhook]``` to run the program, obviously replacing ```[discord webhook]``` with your actual webhook (unless provided in the .env file).
 
-I'd recommend setting up a task / cron to run ```notifier.py``` every day or two to ensure you don't miss out on a deal.
+I'd recommend setting up a task / cron to run ```notifier.py``` every day or two to ensure you don't miss out on a deal. Eg, To run the script every evening at 8pm (local time) in Linux, you will need to run `crontab -e` and insert the line `0 20 * * * cd \[PATH-TO-/GW2-Gemstore-Notifier/\] && .venv/bin/python notifier.py` to the end of the file.
+
 It's recommended that you delete ```last_updated.txt``` (if it exists) after editing ```desired_items.txt``` as you won't be notified if any added items until the API is updated, potentially missing sales.
